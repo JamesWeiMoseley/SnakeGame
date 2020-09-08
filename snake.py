@@ -3,7 +3,7 @@ import time
 import random
 
 score = 0
-high_score = 0
+high = 0
 delay = 0.12
 tail = []
 
@@ -30,7 +30,7 @@ food.goto(0,random.randint(-200, 200))
 pen = turtle.Turtle()
 pen.hideturtle()
 pen.goto(0, 260)
-pen.write("Score: 0  High Score: 0", align="center", font=("Courier", 20, "normal"))
+pen.write("Score: 0  High Score: 0", align="center", font=("Arial", 20, "normal"))
 pen.shape("square")
 pen.color("white")
 
@@ -65,7 +65,7 @@ def delete_tail():
         t.goto(1000,1000)
     tail.clear()
 
-def eat_food(score, high_score):
+def eat_food(score, high):
     if snake.distance(food) < 20:
         food.goto(random.randint(-280,280), random.randint(-280,280))
 
@@ -76,24 +76,29 @@ def eat_food(score, high_score):
         body.penup()
         tail.append(body)
 
+        score += 10
+
+        update_scoreboard()
+
+
     for i in range(len(tail)-1, 0, -1):
         tail[i].goto(tail[i-1].xcor(), tail[i-1].ycor())
     if len(tail)>0:
         tail[0].goto(snake.xcor(), snake.ycor())
     score+=10
-    if score > high_score:
-        high_score = score
+    if score > high:
+        high = score
     update_scoreboard()
 
 
 def update_scoreboard():
     pen.clear()
-    pen.write("Score: {} High Score: {}".format(score, high_score), align="center", font=("Courier", 20, "normal"))
+    pen.write("Score: {} High Score: {}".format(score, high), align="center", font=("Arial", 20, "normal"))
 
 
 def main():
     #movement commands for controlling the snake
-    new_window.listen()           
+    new_window.listen()
     new_window.onkeypress(up, "Up")
     new_window.onkeypress(down, "Down")
     new_window.onkeypress(left, "Left")
@@ -111,8 +116,8 @@ def main():
             snake.direction = "right"
             delete_tail()
 
-        eat_food(score, high_score)
-        
+        eat_food(score, high)
+
         move()
 
         #if the snake hits it's tail
@@ -123,7 +128,7 @@ def main():
                 snake.direction = "right"
                 delete_tail()
 
-        
+
 
 if __name__ == "__main__":
     main()
